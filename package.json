@@ -1,0 +1,18 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "This repository houses the backend components of our comprehensive Learning Management System (LMS). Built with [mention any technologies or frameworks you used], our LMS backend offers robust features for course management, user authentication, and seamless integration with the front end.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "LMS",
+    "Learning",
+    "Mangment",
+    "System",
+    "Backend"
+  ],
+  "author": "Vishnu Vardhan Kattameedi",
+  "license": "ISC"
+}
