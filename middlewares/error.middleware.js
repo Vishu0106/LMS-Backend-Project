@@ -2,11 +2,11 @@ export const errorMiddleware = (error , req, res, next) => {
 
 
 
-    req.statusCode = req.statusCode || 500;
+    req.statusCode = req.statusCode || 400;
     req.message = req.message || "Something went wrong";
 
 
-    return res.status().json(
+    return res.status(req.statusCode).json(
         {
             success:false,
             message: req.message ,

@@ -4,11 +4,11 @@ mongoose.set('strictQuery', false);
 
 export const connectToDB = async () => {
     try {
-        const connection = await mongoose.connect(
-            process.env.MONGO_URI
+        const dbInstance = await mongoose.connect(
+            `${process.env.MONGO_URI}/lms`
         );
-        if(connection) {
-            console.log(`Connecton to MONGO_DB : ${connection.host}`)
+        if(dbInstance) {
+            console.log(`Connecton to MONGO_DB : ${dbInstance.connection.host}`)
         }
     } catch (err) {
         console.log(err);

@@ -20,4 +20,13 @@ const isLoggedIn = function(req, res, next) {
 
 }
 
-export {isLoggedIn}
+const authorizedRoles = (...roles) => (req,res,next) => {
+
+const currentRole = req.user.role;
+if(!roles.includes(currentRole)) {
+   return next(new AppError('You are not authoried Person to do this',403))
+}
+   next();
+}
+
+export {isLoggedIn,authorizedRoles}
