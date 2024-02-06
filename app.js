@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRoute from "./routes/user.routes.js"
 import courseRoute from './routes/course.routes.js'
+import paymentRoute from './routes/payment.routes.js'
 import {errorMiddleware} from "./middlewares/error.middleware.js"
 import morgan from "morgan";
 
@@ -28,6 +29,7 @@ app.use('/ping',(req,res)=>{
 
 app.use('/api/v1/user',userRoute)
 app.use('/api/v1/courses',courseRoute)
+app.use('/api/v1/payments',paymentRoute)
 
 app.all('*',(req,res)=>{
     res.status(404).send('OOPS!! 404 page not found');

@@ -18,9 +18,7 @@ const userSchema = new Schema({
         required: [true,'Email is requied'],
         unique:true,
         trim:true,
-        // match:[
-
-        // ]
+        match:[/^(?:(?:[\w`~!#$%^&*\-=+;:{}'|,?\/]+(?:(?:\.(?:"(?:\\?[\w`~!#$%^&*\-=+;:{}'|,?\/\.()<>\[\] @]|\\"|\\\\)*"|[\w`~!#$%^&*\-=+;:{}'|,?\/]+))*\.[\w`~!#$%^&*\-=+;:{}'|,?\/]+)?)|(?:"(?:\\?[\w`~!#$%^&*\-=+;:{}'|,?\/\.()<>\[\] @]|\\"|\\\\)+"))@(?:[a-zA-Z\d\-]+(?:\.[a-zA-Z\d\-]+)*|\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])$/gm,'Please fill the valid email address..']
     },
     password:{
         type:String,
@@ -42,7 +40,11 @@ const userSchema = new Schema({
         }
     },
     forgotPasswordToken:String,
-    forgotPasswordExpiry:Date
+    forgotPasswordExpiry:Date,
+    subscription:{
+        id:String,
+        status:String
+    }
 
 },{timestamps:true});
 
