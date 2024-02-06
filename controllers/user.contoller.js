@@ -69,7 +69,7 @@ export const register =  async(req , res, next) => {
     await user.save();
 
     // TODO : set jwt token in cookie 
-    const token = await user.generateToken();
+    const token = await user.generateToken;
 
     res.cookie('token',token, cookieOptions);
     user.password=undefined;
@@ -83,18 +83,19 @@ export const login = async (req , res, next) => {
     const {email, password } = req.body
 
     if(!email || !password){
+        console.log(email)
         return next(new AppError('All fileds are mandatory',400))
     }
 
     const user = await User.findOne({
         email
-    }).select("-password")
+    }).select("+password")
 
     if(!user || !user.comparePassword(password)) {
         return next(new AppError('Email or password do not match',400))
     }
 
-    const token = await user.generateToken()
+    const token = await user.generateToken
     user.password = undefined;
 
     res.cookie("token",token,cookieOptions); // setting the cookie
