@@ -13,10 +13,7 @@ const app = express();
 
 app.use(express.json()); // accept the json data
 
-app.use(cors({
-    origin:[process.env.FRONTEND_URL],
-    credentials:true
-}));
+
 
 app.use(morgan('dev'));
 app.use(cookieParser());

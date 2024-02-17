@@ -2,6 +2,7 @@ import AppError  from "../utils/appError.js "
 import {User} from "../models/user.model.js"
 import cloudinary from "cloudinary"
 import {sendEmail} from "../utils/sendEmail.js"
+import fs from 'fs/promises'
 
 
 
@@ -43,17 +44,16 @@ export const register =  async(req , res, next) => {
     if(req.file) {
         try {
 
-            const avatar = await cloudinary.v2.uploader(req.file.path ,{
+            const avatar = await cloudinary.v2.uploader.upload(req.file.path ,{
                 floder: 'lms',
                 width: 250,
                 height:250,
                 gravity: 'faces', // get image size reduce
                 crop:'fill'
             })
-
             if(avatar) {
                 user.avatar.public_id = avatar.public_id;
-                user.avatar.secure_url = avatar.secure_url
+                user.avatar.secure_url = avatar.secure_url;
             }
 
             // remove file from local server
@@ -95,7 +95,7 @@ export const login = async (req , res, next) => {
         return next(new AppError('Email or password do not match',400))
     }
 
-    const token = await user.generateToken
+    const token = await user.generateJWTToken()
     user.password = undefined;
 
     res.cookie("token",token,cookieOptions); // setting the cookie
@@ -118,7 +118,7 @@ export const logout = (req , res) => {
 }
 export const getProfile = async(req , res, next) => {
 
-    const user = User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
 
 
     if(!user) {
@@ -139,7 +139,7 @@ export const forgotPassword = async (req, res, next) => {
     if(!email) {
         return next(new AppError('email is required',500))
     }
-    const user = await user.findOne({email})
+    const user = await User.findOne({email})
 
     if(!user) {
         return next(new AppError('emial is not registred',500))
