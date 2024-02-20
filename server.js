@@ -2,8 +2,6 @@ import app from "./app.js";
 import { connectToDB } from "./config/dbConnection.js";
 import cloudinary from "cloudinary";
 import Razorpay from 'razorpay';
-import {config} from "dotenv"
-config()
 
 
 

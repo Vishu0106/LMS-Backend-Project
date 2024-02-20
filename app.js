@@ -6,6 +6,8 @@ import courseRoute from './routes/course.routes.js'
 import paymentRoute from './routes/payment.routes.js'
 import {errorMiddleware} from "./middlewares/error.middleware.js"
 import morgan from "morgan";
+import {config} from "dotenv"
+config()
 
 
 
@@ -13,7 +15,12 @@ const app = express();
 
 app.use(express.json()); // accept the json data
 
+console.log("URL :- ",process.env.FRONTEND_URL);
 
+app.use(cors({
+    origin:process.env.FRONTEND_URL,
+    credentials:true
+}))
 
 app.use(morgan('dev'));
 app.use(cookieParser());

@@ -1,6 +1,6 @@
 import Course from "../models/course.model.js"
 import AppError from "../utils/appError.js"
-import fs from 'fs/promises'
+import fs from 'fs'
 import cloudinary from 'cloudinary'
 
 export const getAllCourses = async (req,res,next) => {
@@ -60,7 +60,7 @@ export const createCourse = async(req,res,next) =>{
           createdBy,
           thumbnail:{
             public_id:'dummy',
-            secire_url:'dummy'
+            secure_url:'dummy'
           }
        }) 
 
@@ -72,7 +72,7 @@ export const createCourse = async(req,res,next) =>{
             course.thumbnail.public_id = result.public_id;
             course.thumbnail.secure_url=result.secure_url;
         }
-        fs.rm('uploads/${req.file.filename}');
+        // fs.rm(`uploads/${req.file.filename}`);
 
        }
 
