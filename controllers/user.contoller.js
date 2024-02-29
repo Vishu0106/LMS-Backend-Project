@@ -2,7 +2,7 @@ import AppError  from "../utils/appError.js "
 import {User} from "../models/user.model.js"
 import cloudinary from "cloudinary"
 import {sendEmail} from "../utils/sendEmail.js"
-import fs from 'fs/promises'
+import fs from 'fs'
 
 
 
@@ -57,7 +57,11 @@ export const register =  async(req , res, next) => {
             }
 
             // remove file from local server
-            fs.rm(`uploads/${req.file.filename}`)
+            fs.rm(`uploads/${req.file.filename}`,(err)=>{
+                if(err) {
+                    console.log(err);
+                }
+            });
             
         } catch (error) {
            return next(new AppError(error.message || 'File not uploaded to cloud , please try again', 500)) 
@@ -242,7 +246,7 @@ export const changePassword = async function(req,res,next) {
 export const updateUser = async function(req,res,next) {
     const {fullName } = req.body;
     const {id} = req.user;
-    const user = User.findById(id);
+    const user = await User.findById(id);
     if(!user) return next(new AppError('USer not found',400))
 
     if(fullName) {
@@ -254,9 +258,10 @@ export const updateUser = async function(req,res,next) {
 
         try {
 
+            console.log(user.avatar.public_id) ; 
             await cloudinary.v2.uploader.destroy(user.avatar.public_id);
 
-            const avatar = await cloudinary.v2.uploader(req.file.path ,{
+            const avatar = await cloudinary.v2.uploader.upload(req.file.path ,{
                 floder: 'lms',
                 width: 250,
                 height:250,
@@ -264,7 +269,9 @@ export const updateUser = async function(req,res,next) {
                 crop:'fill'
             })
 
+
             if(avatar) {
+
                 user.avatar.public_id = avatar.public_id;
                 user.avatar.secure_url = avatar.secure_url
             }

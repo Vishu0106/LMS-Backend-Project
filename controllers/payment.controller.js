@@ -2,6 +2,7 @@ import { User } from '../models/user.model.js'
 import AppError from '../utils/appError.js'
 import {razorpay} from '../server.js'
 import Payment from '../models/payment.model.js'
+import crypto from "crypto"
 export const getRazorpayApiKey = async (req,res,next) =>{
 
     try {
@@ -9,7 +10,7 @@ export const getRazorpayApiKey = async (req,res,next) =>{
         res.status(200).json({
             success:true,
             message:'Razorpay API Key',
-            key:process.env.RAZORPAY_API_ID
+            key:process.env.RAZORPAY_KEY_ID
         })
         
     } catch (e) {
@@ -21,7 +22,6 @@ export const getRazorpayApiKey = async (req,res,next) =>{
 export const buySubscription = async (req,res,next) =>{
 
     try {
-
         const {id} = req.user
         const user = await User.findById(id);
 
@@ -35,17 +35,20 @@ export const buySubscription = async (req,res,next) =>{
 
         const subscription = await razorpay.subscriptions.create({
             plan_id:process.env.RAZORPAY_PLAN_ID,
-            customer_notify:1
+            customer_notify:1,
+            total_count:12
         })
 
-        user.subscription.id = subscriber.id;
-        user.subscription.status = subscription.status;
+        console.log("hello",subscription);
 
+        user.subscription.id = subscription.id;
+        user.subscription.status = subscription.status;
         await user.save();
 
         res.status(200).json({
             success:true,
-            message:'Subscribed successfully'
+            message:'Subscribed successfully',
+            subscription_id : subscription.id
         })
         
     } catch (e) {
@@ -64,16 +67,17 @@ export const verifySubscription = async(req,res,next) =>{
         if(!user) {
             return next(new AppError('User doesnot found',400))
         }
-
+        
         const {
             razorpay_payment_id, razorpay_signature,
             razorpay_subscription_id
         } = req.body;
 
         const generatedSignature = crypto
-        .createHmac('sha256',process.env.RAZORAY_SECRET)
+        .createHmac('sha256',process.env.RAZORPAY_SECRET)
         .update(`${razorpay_payment_id}|${razorpay_subscription_id}`)
-
+        .digest('hex');
+        
         if(generatedSignature !== razorpay_signature) {
             return next(new AppError('Payment not verifed, please try again',500))
         }
@@ -108,7 +112,7 @@ export const cancelSubscription = async (req,res,next) =>{
 
         const {id} = req.user;
 
-        const user = User.findById(id);
+        const user = await User.findById(id);
 
         if(!user) {
             return next(new AppError('User doenot found',500))
