@@ -1,5 +1,6 @@
 import AppError from '../utils/appError.js';
 import { sendEmail } from '../utils/sendEmail.js';
+import {User } from '../models/user.model.js';
 
 export const contactUs = async (req, res, next) => {
 
@@ -24,3 +25,16 @@ export const contactUs = async (req, res, next) => {
       message: 'Your request has been submitted successfully',
     });
   };
+
+export const userStats = async (req, res, next) => {
+    const allUsersCount = await User.countDocuments();
+
+    const subscribersCount = await User.countDocuments({ 'subscription.status': 'active' });
+
+    res.status(200).json({
+        success: true,
+        message: 'All registered users and subscribers count',
+        allUsersCount,
+        subscribersCount,
+    });
+}
