@@ -18,10 +18,7 @@ app.use(express.json()); // accept the json data
 
 console.log("URL :- ",process.env.FRONTEND_URL);
 
-app.use(cors({
-    origin:process.env.FRONTEND_URL,
-    credentials:true
-}))
+app.use(cors())
 
 app.use(morgan('dev'));
 app.use(cookieParser());

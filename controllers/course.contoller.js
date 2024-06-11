@@ -72,7 +72,11 @@ export const createCourse = async(req,res,next) =>{
             course.thumbnail.public_id = result.public_id;
             course.thumbnail.secure_url=result.secure_url;
         }
-        fs.rm(`uploads/${req.file.filename}`);
+        fs.rm(`uploads/${req.file.filename}`,(err)=>{
+            if(err) {
+                console.log(err);
+            }
+        });
 
        }
 
