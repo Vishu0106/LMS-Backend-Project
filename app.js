@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json()); // accept the json data
 
 app.use(cors({
-    origin:'*'
+    origin:'https://lms-backend-project-2.onrender.com'
 }));
 
 app.use(morgan('dev'));
