@@ -17,7 +17,8 @@ const app = express();
 app.use(express.json()); // accept the json data
 
 app.use(cors({
-    origin:'https://lms-frontend-wheat.vercel.app'
+    origin:'https://lms-frontend-wheat.vercel.app',
+    credentials:true
 }));
 
 app.use(morgan('dev'));
