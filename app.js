@@ -16,7 +16,9 @@ const app = express();
 
 app.use(express.json()); // accept the json data
 
-app.use(cors());
+app.use(cors({
+    origin:'https://lms-frontend-wheat.vercel.app'
+}));
 
 app.use(morgan('dev'));
 app.use(cookieParser());
