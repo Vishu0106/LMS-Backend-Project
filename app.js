@@ -16,9 +16,7 @@ const app = express();
 
 app.use(express.json()); // accept the json data
 
-app.use(cors({
-    origin:'https://lms-backend-project-2.onrender.com'
-}));
+app.use(cors());
 
 app.use(morgan('dev'));
 app.use(cookieParser());
