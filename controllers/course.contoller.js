@@ -24,9 +24,9 @@ export const getAllCourses = async (req,res,next) => {
 export const getLecturesByCourseId = async (req,res,next)=>{
 
     try {
-
+        console.log('getLecturesByCourseId');
+        console.log(req.params);
         const {courseId} = req.params;
-
         const course = await Course.findById(courseId);
 
         if(!course) {

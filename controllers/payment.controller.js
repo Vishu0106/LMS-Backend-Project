@@ -23,7 +23,7 @@ export const buySubscription = async (req,res,next) =>{
 
     try {
         const {id} = req.user
-        const user = await User.findById(id);
+        let user = await User.findById(id);
 
         if(!user) {
             return next(new AppError('User doesnot found',400))
@@ -44,7 +44,7 @@ export const buySubscription = async (req,res,next) =>{
         user.subscription.id = subscription.id;
         user.subscription.status = subscription.status;
         await user.save();
-
+        
         res.status(200).json({
             success:true,
             message:'Subscribed successfully',
@@ -62,7 +62,7 @@ export const verifySubscription = async(req,res,next) =>{
     try {
 
         const {id} = req.user
-        const user = await User.findById(id);
+        let user = await User.findById(id);
 
         if(!user) {
             return next(new AppError('User doesnot found',400))
