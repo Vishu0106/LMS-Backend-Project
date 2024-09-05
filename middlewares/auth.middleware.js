@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";
-
+import {User} from "../models/user.model.js"
 const isLoggedIn = function(req, res, next) {
     const {token} = req.cookies;
 
@@ -30,9 +30,9 @@ if(!roles.includes(currentRole)) {
 }
 
 const authorizedSubscriber = async(req,res,next) =>{
-  
-    const subscriptionStatus = req.user.subscription.status;
-    const currentRole = req.user.role;
+    const user = await User.findById(req.user.id);
+    const subscriptionStatus = user.subscription.status;
+    const currentRole = user.role;
     console.log(subscriptionStatus,'subscriptionStatus');
     if(currentRole !== 'ADMIN' && subscriptionStatus !== 'active') {
         return next(new AppError('Please subscribe to acees the course..',403))
